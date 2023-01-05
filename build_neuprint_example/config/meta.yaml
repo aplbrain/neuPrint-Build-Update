@@ -1,0 +1,17 @@
+dvid_uuid: babdf6dbc23e44a69953a66e2260ff0a
+dataset: mushroombody
+postHighAccuracyThreshold: 0.5
+preHPThreshold: 0.0
+postHPThreshold: 0.7
+last_mutation_id: 9999999
+last_mutation_datetime: 2017-05-12T10:32:04
+np_roiInfo: data/mb6_roiInfo.json
+np_roiHierarchy: data/mb6_roihierarchy.json
+np_primaryROIs: data/np_primaryROIs.json
+np_nonHierarchicalROIs: data/np_nonHierarchicalROIs.json
+neuroglancer_meta: data/np_neuroglancer_meta_updated.json
+meshHost: https://hemibrain-dvid.janelia.org
+np_logo_link: https://www.janelia.org/sites/default/files/Project%20Teams/Fly%20EM/hemibrain_logo.png
+np_info_link: https://www.janelia.org/project-team/flyem/hemibrain
+voxel_units: nanometers
+voxel_size: 8.0;8.0;8.0

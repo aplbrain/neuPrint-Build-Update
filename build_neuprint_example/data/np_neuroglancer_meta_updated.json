@@ -1,0 +1,1 @@
+{"segmentation":{"host":"https://flyem.dvid.io/","uuid":"' + uuid + '","dataType":"segmentation"},"grayscale":{"host":"https://emdata.janelia.org/","uuid":"ee78982c87b14d008bb3f93e9e546c10","dataType":"grayscalejpeg"}}

@@ -1,0 +1,6 @@
+{
+    "mushroombody": {"description": "mushroombody", "parent": "", "inNP": false, "showHierarchy": true, "hasROI": false, "isPrimary": false},
+    "alpha1": {"showHierarchy": true, "isPrimary": true, "hasROI": false, "description": "alpha lobe compartment 1", "parent": "mushroombody"},
+    "alpha2": {"showHierarchy": true, "isPrimary": true, "hasROI": false, "description": "alpha lobe compartment 2", "parent": "mushroombody"},
+    "alpha3": {"showHierarchy": true, "isPrimary": true, "hasROI": false, "description": "alpha lobe compartment 3", "parent": "mushroombody"}
+}

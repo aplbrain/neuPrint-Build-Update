@@ -1,0 +1,1 @@
+CALL apoc.warmup.run();

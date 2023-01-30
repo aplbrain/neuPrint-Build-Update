@@ -13,7 +13,7 @@ import pandas as pd
 from neuclease.dvid import find_master, fetch_synapses_in_batches, fetch_labels_batched, fetch_combined_roi_volume
 from neuclease.util import extract_labels_from_volume
 
-#example: python export_dvid_synapses.py emdata5-private.janelia.org:8510 52356 synapses segmentation
+#example: python export_dvid_synapses.py emdata5-private.janelia.org:8510 45d61 synapses segmentation all_ROIs.txt
 server = sys.argv[1]
 uuid = sys.argv[2]
 annotation = sys.argv[3]
@@ -74,11 +74,10 @@ roi_vol, box, overlaps = fetch_combined_roi_volume(*master, rois, box_zyx=[(0,0,
 #synapses_df = load_synapses_csv(synapse_csv)
 #print(f"Loaded {len(synapses_df)} points")
 extract_labels_from_volume(synapses_df, roi_vol, vol_scale=5, label_names=rois)
-
 synapses_df.rename(columns={'label_name': 'roi'}, inplace=True)
 
 synapses_df['roi'] = synapses_df['roi'].replace(['<unspecified>'], '')
-
+synapses_df.drop('label', axis=1, inplace=True)
 print(synapses_df)
 
 synapses_ftr = "synapses_" + uuid + ".ftr"

@@ -14,6 +14,8 @@ import pandas as pd
 from neuclease.util import compute_parallel, read_csv_col
 from neuclease.dvid import find_master, fetch_sizes, fetch_keys, fetch_keyvalues
 
+#example: python export_dvid_neurons.py emdata5-private.janelia.org:8510 45d61 segmentation segmentation_annotations synapses_45d61.ftr
+
 server = sys.argv[1]
 uuid = sys.argv[2]
 segmentation = sys.argv[3]
@@ -23,7 +25,6 @@ synapses_ftr = sys.argv[5]
 master = (server, uuid)
 
 syn_df = pd.read_feather(synapses_ftr)
-#synId     x     y      z     type  confidence     roi     body
 body_list = syn_df['body'].tolist()
 #print(len(body_list))
 uniq_body_list = list(set(body_list))
@@ -114,6 +115,8 @@ for bodyid in body_sizes_dict:
 
 #print(all_neurons)
 neurons_df = pd.DataFrame(all_neurons).transpose()
+neurons_df['body'] = neurons_df['body'].fillna(0).astype(int)
+neurons_df['size'] = neurons_df['size'].fillna(0).astype(int)
 
 print(neurons_df)
 

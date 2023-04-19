@@ -1,0 +1,209 @@
+#!/bin/env
+
+# python generate_Neuprint_Meta_csv.py synIDs_synapses-a7835-rois-bodyIDs.csv meta.yaml > Neuprint_Meta_a7835.csv
+# ------------------------- imports -------------------------
+import json
+import sys
+import os
+import io
+import time
+import re
+import pandas as pd
+import yaml
+
+def parse_config (config_file):
+    with open(config_file) as f:
+        config_data = yaml.load(f, Loader=yaml.FullLoader)
+    return config_data
+
+if __name__ == '__main__':
+    synapses_ftr = sys.argv[1]
+    config_yaml_file = sys.argv[2]
+    config_data = parse_config(config_yaml_file)
+
+    uuid = config_data['dvid_uuid']
+    dataset = config_data['dataset']
+    
+    all_rois = {}
+    rois_pre_count = {}
+    rois_post_count = {}
+    tot_pre_count = 0
+    tot_post_count = 0
+
+    #id_count = 0
+    syn_df = pd.read_feather(synapses_ftr)
+    for index, row in syn_df.iterrows():
+        # synId     x     y      z     type  confidence     roi     body
+        #syn_id = synData[0]
+        #x = synData[1]
+        #y = synData[2]
+        #z = synData[3]
+        syn_type_dvid = row['type']        
+        confidence = row['confidence']        
+        if row['roi'] == None:
+            super_roi = ""
+        else:
+            super_roi =  row['roi']
+
+        sub1_roi = "" #synData[7]
+        sub2_roi = "" #synData[8].replace("|",",")
+        sub3_roi = "" #synData[9]
+
+        all_rois[super_roi] = 1
+        all_rois[sub1_roi] = 1
+        all_rois[sub2_roi] = 1
+        all_rois[sub3_roi] = 1
+
+        if syn_type_dvid == "PostSyn":
+            syn_type = "post"
+            tot_post_count += 1
+            if super_roi in rois_post_count:
+                rois_post_count[super_roi] += 1
+            else:
+                rois_post_count[super_roi] = 1
+
+            if sub1_roi in rois_post_count:
+                rois_post_count[sub1_roi] += 1
+            else:
+                rois_post_count[sub1_roi] = 1
+                
+            if sub2_roi in rois_post_count:
+                rois_post_count[sub2_roi] += 1
+            else:
+                rois_post_count[sub2_roi] = 1
+
+            if sub3_roi in rois_post_count:
+                rois_post_count[sub3_roi] += 1
+            else:
+                rois_post_count[sub3_roi] = 1
+
+        elif syn_type_dvid == "PreSyn":
+            syn_type = "pre"
+            tot_pre_count += 1
+            if super_roi in rois_pre_count:
+                rois_pre_count[super_roi] += 1
+            else:
+                rois_pre_count[super_roi] = 1
+
+            if sub1_roi in rois_pre_count:
+                rois_pre_count[sub1_roi] += 1
+            else:
+                rois_pre_count[sub1_roi] = 1
+
+            if sub2_roi in rois_pre_count:
+                rois_pre_count[sub2_roi] += 1
+            else:
+                rois_pre_count[sub2_roi] = 1
+
+            if sub3_roi in rois_pre_count:
+                rois_pre_count[sub3_roi] += 1
+            else:
+                rois_pre_count[sub3_roi] = 1
+    
+    roiInfo = {}
+    for roi in sorted (all_rois.keys()):
+        pre_count = 0
+        post_count = 0
+        if roi in rois_pre_count:
+            pre_count = rois_pre_count[roi]
+        if roi in rois_post_count:
+            post_count = rois_post_count[roi]
+        #print(roi + "," + str(pre_count) + "," + str(post_count))
+        if roi != "":
+            syn_counts = {}
+            syn_counts["pre"] = pre_count
+            syn_counts["post"] = post_count 
+            roiInfo[roi] = syn_counts
+
+    #roi descriptions
+    np_roiInfo_json = config_data['np_roiInfo']
+    roi_desc = json.loads(open(np_roiInfo_json, 'rt').read())
+
+    for roiName in roi_desc:
+        roi_desc_data = roi_desc[roiName]
+        if roiName in roiInfo:
+            syn_counts = roiInfo[roiName]
+            if "pre" in syn_counts:
+                roi_desc_data["pre"] = syn_counts["pre"]
+            if "post" in syn_counts:
+                roi_desc_data["post"] = syn_counts["post"]
+        if roiName == "hemibrain":
+            roi_desc_data["pre"] = tot_pre_count
+            roi_desc_data["post"] = tot_post_count
+
+    roiInfo_tmp = json.dumps(roi_desc)
+
+    #print(roiInfo_tmp)
+    #sys.exit()
+
+    roiInfo = roiInfo_tmp.replace('"','""')
+    #roiInfo_tmp = json.dumps(roiInfo)
+    #roiInfo = roiInfo_tmp.replace('"','""')
+    
+    #load roiHierarchy
+    np_roiHierarchy_json = config_data['np_roiHierarchy']
+    roi_hier = json.loads(open(np_roiHierarchy_json, 'rt').read())
+    roi_hier_tmp = json.dumps(roi_hier)
+    roiHier_str = roi_hier_tmp.replace('"','""')
+
+    #load all the superlevel/toplevel ROIs
+    superLevelROIs_json = config_data['np_primaryROIs']
+    superLevelrois = json.loads(open(superLevelROIs_json, 'rt').read())    
+    superLevelrois_str = ""
+    for slROI in superLevelrois:
+        superLevelrois_str = superLevelrois_str + ';' + slROI    
+    superLevelrois_str = re.sub(r'^;','',superLevelrois_str)
+
+    #load all misc ROIs
+    nonHierarchicalROIs_json = config_data['np_nonHierarchicalROIs']
+    nonHierarchicalROIs = json.loads(open(nonHierarchicalROIs_json, 'rt').read())
+    nonHierarchicalROIs_str = ""
+    for nhROI in nonHierarchicalROIs:
+        nonHierarchicalROIs_str = nonHierarchicalROIs_str + ';' + nhROI
+    nonHierarchicalROIs_str = re.sub(r'^;','',nonHierarchicalROIs_str)
+
+    postHighAccuracyThreshold = config_data['postHighAccuracyThreshold']
+    preHPThreshold = config_data['preHPThreshold']
+    postHPThreshold = config_data['postHPThreshold']
+
+    meshHost = config_data['meshHost']
+
+    #uuid = "a89eb3af216a46cdba81204d8f954786"
+
+    neuroglancerInfo_tmp = '{"segmentation":{"host":"http://http://wasptrace.flatironinstitute.org/","uuid":"' + uuid + '","dataType":"labels"},"grayscale":{"host":"http://wasptrace.flatironinstitute.org/","uuid":"bfeeeb2b98bb4b2aa9b5e38256c6f1f1","dataType":"grayscalejpeg"}}'
+    neuroglancerInfo = neuroglancerInfo_tmp.replace('"','""')
+
+    neuroglancer_meta_updated_json = config_data["neuroglancer_meta"]
+    NGloaded = json.loads(open(neuroglancer_meta_updated_json, 'rt').read())
+    NGMeta = json.dumps(NGloaded)
+    
+    neuroglancerMeta = NGMeta.replace('"','""')
+
+    statusDefinitions_tmp = '{"Roughly traced":"neuron high-level shape correct and validated by biological expert", "Prelim Roughly traced": "neuron high-level shape most likely correct or nearly complete, not yet validated by biological expert", "Anchor":"Big segment that has not been roughly traced", "0.5assign":"Segment fragment that is within the set required for a 0.5 connectome"}'
+    statusDefinitions = statusDefinitions_tmp.replace('"','""')
+
+    latestMutationId = config_data['last_mutation_id']
+
+    totalPreCount = tot_pre_count
+    totalPostCount = tot_post_count
+
+    lastDatabaseEdit = str(config_data['last_mutation_datetime'])
+    
+    logo = "https://www.janelia.org/sites/default/files/Project%20Teams/Fly%20EM/hemibrain_logo.png"
+    info = "https://www.janelia.org/project-team/flyem/hemibrain"
+
+    header = "voxelSize:float[],voxelUnits:string,info:string,logo:string,postHighAccuracyThreshold:float,preHPThreshold:float,postHPThreshold:float,meshHost:string,uuid:string,neuroglancerInfo:string,neuroglancerMeta:string,statusDefinitions:string,latestMutationId:int,totalPreCount:int,totalPostCount:int,lastDatabaseEdit:string,superLevelRois:string[],primaryRois:string[],nonHierarchicalROIs:string[],roiInfo:string,roiHierarchy:string,dataset:string,:LABEL"
+    #print(roiInfo)
+
+    voxel_units = config_data['voxel_units']
+    voxel_size = config_data['voxel_size']
+
+    print(header)
+    print( '"' + voxel_size + '","' + voxel_units + '",' + '"' + str(info) + '","' + str(logo) + '",' + str(postHighAccuracyThreshold) + ',' + str(preHPThreshold) + ',' + str(postHPThreshold) + ',"' + meshHost + '","' + uuid + '","' + neuroglancerInfo + '","' + neuroglancerMeta + '","' + statusDefinitions + '",' + str(latestMutationId) + ',' + str(totalPreCount) + ',' + str(totalPostCount) + ',"' + lastDatabaseEdit + '","' + superLevelrois_str + '","' + superLevelrois_str + '","' + nonHierarchicalROIs_str + '","' + roiInfo + '","' + roiHier_str + '",' + dataset + ',Meta;' + dataset + '_Meta' )
+
+#    header = "tag:string,info:string,logo:string,postHighAccuracyThreshold:float,preHPThreshold:float,postHPThreshold:float,meshHost:string,uuid:string,neuroglancerInfo:string,neuroglancerMeta:string,statusDefinitions:string,latestMutationId:int,totalPreCount:int,totalPostCount:int,lastDatabaseEdit:string,superLevelRois:string[],primaryRois:string[],nonHierarchicalRois:string[],roiInfo:string,roiHierarchy:string,dataset:string,:LABEL"
+#    print(header)
+#    print( '"v1.0.1","' + str(info) + '","' + str(logo) + '",' + str(postHighAccuracyThreshold) + ',' + str(preHPThreshold) + ',' + str(postHPThreshold) + ',"' + meshHost + '","' + uuid + '","' + neuroglancerInfo + '","' + neuroglancerMeta + '","' + statusDefinitions + '",' + str(latestMutationId) + ',' + str(totalPreCount) + ',' + str(totalPostCount) + ',"' + lastDatabaseEdit + '","' + superLevelrois_str + '","' + superLevelrois_str + '","' + nonHierarchicalROIs_str +'","' + roiInfo + '","' + roiHier_str + '",hemibrain,Meta;hemibrain_Meta' )
+
+#nonHierarchicalROIs_str
+    

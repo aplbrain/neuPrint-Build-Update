@@ -189,8 +189,8 @@ if __name__ == '__main__':
 
     lastDatabaseEdit = str(config_data['last_mutation_datetime'])
     
-    logo = "https://www.janelia.org/sites/default/files/Project%20Teams/Fly%20EM/hemibrain_logo.png"
-    info = "https://www.janelia.org/project-team/flyem/hemibrain"
+    logo = config_data['np_logo_link']
+    info = config_data['np_info_link']
 
     header = "voxelSize:float[],voxelUnits:string,info:string,logo:string,postHighAccuracyThreshold:float,preHPThreshold:float,postHPThreshold:float,meshHost:string,uuid:string,neuroglancerInfo:string,neuroglancerMeta:string,statusDefinitions:string,latestMutationId:int,totalPreCount:int,totalPostCount:int,lastDatabaseEdit:string,superLevelRois:string[],primaryRois:string[],nonHierarchicalROIs:string[],roiInfo:string,roiHierarchy:string,dataset:string,:LABEL"
     #print(roiInfo)

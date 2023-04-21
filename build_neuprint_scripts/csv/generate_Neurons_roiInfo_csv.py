@@ -34,12 +34,17 @@ if __name__ == '__main__':
         roi = row['roi']
         if roi == None:
             roi = ""
-        else:
-            roi = row['roi']
 
-        sub1_roi = ""
-        sub2_roi = ""
+        sub1_roi = row['sub1_roi']
+        if sub1_roi == None:
+            sub1_roi = ""
+
+        sub2_roi = row['sub2_roi']
+        if sub2_roi == None:
+            sub2_roi = ""
+
         sub3_roi = ""
+
         #print("roi",roi)
         roiDetected = 0
         if len(roi) > 0:

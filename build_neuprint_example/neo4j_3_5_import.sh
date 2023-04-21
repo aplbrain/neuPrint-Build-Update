@@ -31,3 +31,9 @@ pwd
 # neo4j 3.5 build
 #/usr/bin/neo4j-admin import --database=${NEO4J_DB} ${META_NODE_CMD} ${NEURON_NODE_CMD} ${NEURON_REL_CMD} ${SYNSET_NODE_CMD} ${SYNSET_REL_CMD} ${SYNAPSE_NODE_CMD} ${SYNAPSE_REL_CMD}
 /usr/bin/neo4j-admin import ${META_NODE_CMD} ${NEURON_NODE_CMD} ${NEURON_REL_CMD} ${SYNSET_NODE_CMD} ${SYNSET_REL_CMD} ${SYNAPSE_NODE_CMD} ${SYNAPSE_REL_CMD}
+
+rm -rf /var/lib/neo4j/data/${UUID}
+mkdir /var/lib/neo4j/data/${UUID}
+mv /var/lib/neo4j/data/databases /var/lib/neo4j/data/${UUID}/databases
+sudo chgrp -R systemd-journal /var/lib/neo4j/data/${UUID}
+sudo chown -R systemd-network /var/lib/neo4j/data/${UUID}

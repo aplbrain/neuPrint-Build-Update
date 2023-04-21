@@ -31,7 +31,6 @@ if __name__ == '__main__':
     allRoisList = open(all_rois_csv,'r')
     for line in allRoisList:
         roi_name = line.rstrip('\n')
-        print(roi_name)
         all_rois.append(roi_name)
 
     downstream_lookup = {}

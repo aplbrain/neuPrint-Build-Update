@@ -93,5 +93,5 @@ if __name__ == '__main__':
         connection = "PreSynTo"
         #print(from_super_roi + ",")
         #print(str(from_synId) + "," + from_x + "," + from_y + "," + from_z + ","  + from_conf + "," + from_super_roi + "," + from_sub1_roi + "," + from_sub2_roi + "," + from_sub3_roi + "," + from_bodyId + "," + connection)
-        #print(str(from_synId) + "," + from_x + "," + from_y + "," + from_z + ","  + from_conf + "," + from_super_roi + "," + from_sub1_roi + "," + from_sub2_roi + "," + from_sub3_roi + "," + from_bodyId + "," + connection + "," + str(to_synId) + "," + to_x + "," + to_y + "," + to_z + "," + to_conf + "," + to_super_roi + "," + to_sub1_roi + "," + to_sub2_roi + "," + to_sub3_roi + "," + to_bodyId)
+        print(str(from_synId) + "," + str(from_x) + "," + str(from_y) + "," + str(from_z) + ","  + str(from_conf) + "," + str(from_super_roi) + "," + str(from_sub1_roi) + "," + str(from_sub2_roi) + "," + str(from_sub3_roi) + "," + str(from_bodyId) + "," + str(connection) + "," + str(to_synId) + "," + str(to_x) + "," + str(to_y) + "," + str(to_z) + "," + str(to_conf) + "," + str(to_super_roi) + "," + str(to_sub1_roi) + "," + str(to_sub2_roi) + "," + str(to_sub3_roi) + "," + str(to_bodyId))
             

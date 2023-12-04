@@ -52,7 +52,7 @@ if __name__ == '__main__':
         #sub3_roi = synData[9]
             
         location = "\"{x:" + str(x) + ", y:" + str(y) + ", z:" + str(z) + "}\""
-        syn_line = str(syn_id) + "," + syn_type + "," + str(confidence) + "," + location + ",Synapse;" + dataset + "_Synapse"
+        syn_line = str(syn_id) + "," + syn_type + "," + str(confidence) + "," + location + ",Synapse;" + dataset + "_Synapse;" + "Element;" + dataset + "_Element"
         for roi_name in all_rois:
             is_roi = ""
             if roi_name == super_roi:

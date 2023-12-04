@@ -21,7 +21,7 @@ if __name__ == '__main__':
     config_yaml_file = sys.argv[2]
     config_data = parse_config(config_yaml_file)
 
-    uuid = config_data['dvid_uuid']
+    uuid = str(config_data['dvid_uuid'])
     dataset = config_data['dataset']
     
     all_rois = {}
@@ -166,9 +166,9 @@ if __name__ == '__main__':
     preHPThreshold = config_data['preHPThreshold']
     postHPThreshold = config_data['postHPThreshold']
 
-    meshHost = config_data['meshHost']
+    meshHost = str(config_data['meshHost'])
 
-    #uuid = "a89eb3af216a46cdba81204d8f954786"
+    # uuid = ""
 
     neuroglancerInfo_tmp = '{"segmentation":{"host":"http://http://wasptrace.flatironinstitute.org/","uuid":"' + uuid + '","dataType":"labels"},"grayscale":{"host":"http://wasptrace.flatironinstitute.org/","uuid":"bfeeeb2b98bb4b2aa9b5e38256c6f1f1","dataType":"grayscalejpeg"}}'
     neuroglancerInfo = neuroglancerInfo_tmp.replace('"','""')

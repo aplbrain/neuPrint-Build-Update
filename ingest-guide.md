@@ -27,6 +27,9 @@ Next, run `sudo ./neo4j_3_5_import.sh <dataset_name>`. This will ingest the data
 Finally, edit the production configuration file. First, add a new neo4j container to neuprint-swarm.yaml. Mount the db to a volume within the new container using `/var/lib/neo4j/data/<dataset_name>:/data:rw`. Second, add a new alternative database to config/config.json.
 
 To update prod with the new dataset, run the following commands:
+
 `docker stack deploy -c neuprint-swarm.yml neuprint`
+
 `docker service scale neuprint_neuprinthttp=0`
+
 `docker service scale neuprint_neuprinthttp=1`

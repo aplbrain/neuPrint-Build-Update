@@ -1,6 +1,6 @@
 ## Steps to ingest a dataset to NeuPrint
 
-First, these ingest scripts expect a certain schema. Here are the columns for the 3 csv's.
+First, these ingest scripts expect a certain schema. Here are the columns for the 3 csv's. TODO: clean up examples folder and add the directory these files should be placed in for the scripts to work.
 
 neurons.csv:
 | body | name | statusLabel | type | cropped | instance | size |

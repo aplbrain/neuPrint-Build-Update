@@ -12,7 +12,8 @@ import pandas as pd
 
 if __name__ == '__main__':
     synapses_connect_csv = sys.argv[1]
-    dataset = sys.argv[2]
+    neurons_csv = sys.argv[2]
+    dataset = sys.argv[3]
 
     synapse_connect = {}
     synapse_connect_hp = {}
@@ -22,6 +23,7 @@ if __name__ == '__main__':
     all_synSet = {}
 
     synapseList = open(synapses_connect_csv,'r')
+    neurons = pd.read_csv(neurons_csv)
     for line in synapseList:
         if line[0].isdigit():
             data_str = line.rstrip('\n')
@@ -48,22 +50,23 @@ if __name__ == '__main__':
                 all_synSet[dict_key_post] = 1
                                 
                 if dict_key_pre in synapse_connect:
-                    synapse_connect[dict_key_pre] += 1
+                    pass
                 else:
-                    synapse_connect[dict_key_pre] = 1
+                    synapse_connect[dict_key_pre] = from_bodyId
 
                 if dict_key_post in synapse_connect:
-                    synapse_connect[dict_key_post] += 1
+                    pass
                 else:
-                    synapse_connect[dict_key_post] = 1
+                    synapse_connect[dict_key_post] = to_bodyId
 
 
     track_synapseSet = {}
-    print (":ID(SynSet-ID),:Label")
+    print (":ID(SynSet-ID),:Label,location:point{srid:9157}")
     for connect_key in synapse_connect:
         if connect_key in track_synapseSet:
             continue
         else:
+            loc = neurons.loc[neurons["bodyId:long"] == int(synapse_connect[connect_key])]["somaLocation:point{srid:9157}"].iloc[0]
             track_synapseSet[connect_key] = 1
-            print(connect_key + ",SynapseSet;" + dataset + "_SynapseSet")
+            print(connect_key + ',SynapseSet;' + dataset + '_SynapseSet,"' + loc + '"')
 

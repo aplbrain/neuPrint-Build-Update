@@ -68,7 +68,7 @@ if __name__ == '__main__':
 
     all_values = {}
     for index, row in df.iterrows():
-        #body     statusLabel cropped instance    type        size
+        #body     statusLabel cropped instance    type        size  somaLocation
         neuron_annot = {}
         bodyId = str(row['body'])
         neuron_annot['bodyId'] = row['body']
@@ -109,6 +109,24 @@ if __name__ == '__main__':
         else:
             neuron_name = row['name']
         neuron_annot['name'] = neuron_name
+
+        if row['somaX'] == None:
+            somaLocationX = ""
+        else:
+            somaLocationX = row['somaX']
+        neuron_annot['somaX'] = somaLocationX
+
+        if row['somaY'] == None:
+            somaLocationY = ""
+        else:
+            somaLocationY = row['somaY']
+        neuron_annot['somaY'] = somaLocationY
+
+        if row['somaZ'] == None:
+            somaLocationZ = ""
+        else:
+            somaLocationZ = row['somaZ']
+        neuron_annot['somaZ'] = somaLocationZ
 
         all_values[bodyId] = neuron_annot
         
@@ -170,10 +188,10 @@ if __name__ == '__main__':
                 roiInfo = "{}"
                 roiInfo_str = "{}"
             
-            somaLocation = ""
-            somaLocationX = ""
-            somaLocationY = ""
-            somaLocationZ = ""
+            # somaLocation = ""
+            # somaLocationX = ""
+            # somaLocationY = ""
+            # somaLocationZ = ""
             somaRadius = ""
             bodySize = "0"
             status = ""
@@ -204,13 +222,15 @@ if __name__ == '__main__':
             #if bodyID in size_lookup:
             #    bodySize = size_lookup[bodyID]
 
-            if bodyID in soma_lookup:
-                soma_data = soma_lookup[bodyID]
-                somaLocationX = int(float(soma_data[2]))
-                somaLocationY = int(float(soma_data[3]))
-                somaLocationZ = int(float(soma_data[4]))
-                somaLocation = '"{x:' + str(somaLocationX) + ',y:' + str(somaLocationY) + ',z:' + str(somaLocationZ) + '}"'
-                somaRadius = soma_data[5]
+            # if bodyID in soma_lookup:
+            #     soma_data = soma_lookup[bodyID]
+            #     somaLocationX = int(float(soma_data[2]))
+            #     somaLocationY = int(float(soma_data[3]))
+            #     somaLocationZ = int(float(soma_data[4]))
+            #     somaLocation = '"{x:' + str(somaLocationX) + ',y:' + str(somaLocationY) + ',z:' + str(somaLocationZ) + '}"'
+            #     somaRadius = soma_data[5]
+
+            # somaLocation = '"{x:' + str(somaLocationX) + ',y:' + str(somaLocationY) + ',z:' + str(somaLocationZ) + '}"'
             
             if bodyID in all_values:
                 bodyData = all_values[bodyID]
@@ -292,6 +312,11 @@ if __name__ == '__main__':
                     clonalUnit2 = clonalUnit1.rstrip('\n')
                     clonalUnit = clonalUnit2.replace(',','')
                 #clonalUnit = ""
+
+                if 'somaX' in bodyData and 'somaY' in bodyData and 'somaZ' in bodyData:
+                    somaLocation = '"{x:' + str(bodyData["somaX"]) + ',y:' + str(bodyData["somaY"]) + ',z:' + str(bodyData["somaZ"]) + '}"'
+                else:
+                    somaLocation = ""
                 
             is_hemibrain_Neuron = ""
             if int(pre_syns) >= 2:

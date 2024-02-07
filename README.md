@@ -6,3 +6,6 @@ Scripts and process to create a neuPrint database are located in dvid_to_neuprin
 
 ## Scripts to Modify an existing neuPrint Database and Perform Live Updates
 Scripts	and process to update a neuPrint database are located in neuprint_update directory
+
+## Hannah's addition
+Check out ingest-guide.md

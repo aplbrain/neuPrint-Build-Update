@@ -1,6 +1,6 @@
 ## Steps to ingest a dataset to NeuPrint
 
-First, these ingest scripts expect a certain schema. Here are the columns for the 3 csv's. TODO: clean up examples folder and add the directory these files should be placed in for the scripts to work.
+First, these ingest scripts expect a certain schema. Here are the columns for the 3 csv's.
 
 neurons.csv:
 | body | name | statusLabel | type | cropped | instance | size |
@@ -14,7 +14,7 @@ connections.csv:
 | synId_pre | synId_post |
 |---|---|
 
-Additionally, there are 4 json files for ROIs, 1 json file for neuroglancer settings if neuroglancer will be integrated, a text file where each ROI should be listed, and 2 yaml files for dataset metadata and neuron metadata. An example for each of these files lies in `build_neuprint_example/data` and `build_neuprint_example/config`.
+Additionally, there are 4 json files for ROIs, 1 json file for neuroglancer settings if neuroglancer will be integrated, a text file where each ROI should be listed, and 2 yaml files for dataset metadata and neuron metadata. An example for each of these files lies in `build_neuprint_example/data`.
 
 _Witvliet note:_
 In the Witvliet folder on the neuprint-prod EC2, `python witvliet_ingest_script.py -n dataset_no` can generate these files in a new directory with the dataset's title, using a number of files that have been compiled for the witvliet datasets. Note that there are a few metadata parameters which must be changed in the script before running.

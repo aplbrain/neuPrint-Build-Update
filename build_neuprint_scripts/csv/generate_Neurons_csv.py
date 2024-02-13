@@ -110,23 +110,20 @@ if __name__ == '__main__':
             neuron_name = row['name']
         neuron_annot['name'] = neuron_name
 
-        if row['somaX'] == None:
-            somaLocationX = ""
-        else:
-            somaLocationX = row['somaX']
-        neuron_annot['somaX'] = somaLocationX
+        if 'somaX' in row:
+            neuron_annot['somaX'] = row['somaX']
 
-        if row['somaY'] == None:
-            somaLocationY = ""
-        else:
-            somaLocationY = row['somaY']
-        neuron_annot['somaY'] = somaLocationY
+        if 'somaY' in row:
+            neuron_annot['somaY'] = row['somaY']
 
-        if row['somaZ'] == None:
-            somaLocationZ = ""
-        else:
-            somaLocationZ = row['somaZ']
-        neuron_annot['somaZ'] = somaLocationZ
+        if 'somaZ' in row:
+            neuron_annot['somaZ'] = row['somaZ']
+
+        # if row['somaZ'] == None:
+        #     somaLocationZ = ""
+        # else:
+        #     somaLocationZ = row['somaZ']
+        # neuron_annot['somaZ'] = somaLocationZ
 
         all_values[bodyId] = neuron_annot
         

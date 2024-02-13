@@ -1,0 +1,8 @@
+dvid_server: emdata4:8900
+dvid_uuid: a783551a946a4472a6f9bfaa2a009e44
+dataset: mushroombody
+all_rois_csv: data/all_ROIs.txt
+downstream_csv: import/downstream_synapses.csv
+downstream_roiInfo: import/downstream_synapses_roiInfo.csv
+neuron_sizes_csv: import/neuron_sizes.csv
+neuron_annot_keyvalue: segmentation_annotations

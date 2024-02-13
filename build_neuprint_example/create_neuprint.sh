@@ -8,6 +8,10 @@ all_rois=$5
 neurons_yaml=$6
 meta_yaml=$7
 
+if [ ! -d import ]; then
+  mkdir import;
+fi
+
 # Create synapses and bodie relationship file
 echo 'Building connections csv'
 python3 /home/ubuntu/neuPrint-Build-Update/build_neuprint_scripts/csv/generate_Synapse_Connections_All_csv.py $synapses $connections > import/All_Neuprint_Synapse_Connections_$dataset.csv
@@ -19,6 +23,14 @@ python3 /home/ubuntu/neuPrint-Build-Update/build_neuprint_scripts/csv/detect_dow
 # Generate Neuron downstream ROIs
 echo 'Building downstream synapse rois'
 python3 /home/ubuntu/neuPrint-Build-Update/build_neuprint_scripts/csv/detect_downstream_roiInfo.py import/All_Neuprint_Synapse_Connections_$dataset.csv > import/downstream_synapses_roiInfo.csv
+
+# Generate roiInfo, pre, post counts
+echo 'Building roi info'
+python3 /home/ubuntu/neuPrint-Build-Update/build_neuprint_scripts/csv/generate_Neurons_roiInfo_csv.py $synapses > import/synapse_bodies_$dataset.csv
+
+# Generate Neurons
+echo 'Building neuron csv'
+python3 /home/ubuntu/neuPrint-Build-Update/build_neuprint_scripts/csv/generate_Neurons_csv.py import/synapse_bodies_$dataset.csv $neurons $neurons_yaml > import/Neuprint_Neurons_$dataset.csv
 
 # Create Synapse csv
 echo 'Building synapses csv'
@@ -38,7 +50,7 @@ python3 /home/ubuntu/neuPrint-Build-Update/build_neuprint_scripts/csv/generate_S
 
 # Generate Synapse Set collection
 echo 'Building synapse sets'
-python3 /home/ubuntu/neuPrint-Build-Update/build_neuprint_scripts/csv/generate_SynapseSets.py import/All_Neuprint_Synapse_Connections_$dataset.csv $dataset > import/Neuprint_SynapseSet_$dataset.csv
+python3 /home/ubuntu/neuPrint-Build-Update/build_neuprint_scripts/csv/generate_SynapseSets.py import/All_Neuprint_Synapse_Connections_$dataset.csv import/Neuprint_Neurons_$dataset.csv $dataset > import/Neuprint_SynapseSet_$dataset.csv
 
 # Generate Neuron to Synapse Set
 echo 'Building neuron to synapsesets'
@@ -47,14 +59,6 @@ python3 /home/ubuntu/neuPrint-Build-Update/build_neuprint_scripts/csv/generate_N
 # Generate Synapse Set to Synapse Set
 echo 'Building synapsesets to synapsesets'
 python3 /home/ubuntu/neuPrint-Build-Update/build_neuprint_scripts/csv/generate_SynapseSet_to_SynapseSet.py import/All_Neuprint_Synapse_Connections_$dataset.csv > import/Neuprint_SynapseSet_to_SynapseSet_$dataset.csv
-
-# Generate roiInfo, pre, post counts
-echo 'Building roi info'
-python3 /home/ubuntu/neuPrint-Build-Update/build_neuprint_scripts/csv/generate_Neurons_roiInfo_csv.py $synapses > import/synapse_bodies_$dataset.csv
-
-# Generate Neurons
-echo 'Building neuron csv'
-python3 /home/ubuntu/neuPrint-Build-Update/build_neuprint_scripts/csv/generate_Neurons_csv.py import/synapse_bodies_$dataset.csv $neurons $neurons_yaml > import/Neuprint_Neurons_$dataset.csv
 
 # Generate Neuprint Meta
 echo 'Building metadata csv'

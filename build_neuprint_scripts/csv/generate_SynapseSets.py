@@ -67,6 +67,10 @@ if __name__ == '__main__':
             continue
         else:
             loc = neurons.loc[neurons["bodyId:long"] == int(synapse_connect[connect_key])]["somaLocation:point{srid:9157}"].iloc[0]
+            try:
+                if np.isnan(loc):
+                    print(f"{connect_key},SynapseSet;{dataset}_SynapseSet,")
+            except:
+                print(f"{connect_key},SynapseSet;{dataset}_SynapseSet,\"{loc}\"")
             track_synapseSet[connect_key] = 1
-            print(connect_key + ',SynapseSet;' + dataset + '_SynapseSet,"' + loc + '"')
 

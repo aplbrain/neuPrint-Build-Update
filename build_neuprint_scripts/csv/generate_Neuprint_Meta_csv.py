@@ -170,7 +170,8 @@ if __name__ == '__main__':
 
     # uuid = ""
 
-    neuroglancerInfo_tmp = '{"segmentation":{"host":"http://http://wasptrace.flatironinstitute.org/","uuid":"' + uuid + '","dataType":"labels"},"grayscale":{"host":"http://wasptrace.flatironinstitute.org/","uuid":"bfeeeb2b98bb4b2aa9b5e38256c6f1f1","dataType":"grayscalejpeg"}}'
+    # neuroglancerInfo_tmp = '{"segmentation":{"host":"http://http://wasptrace.flatironinstitute.org/","uuid":"' + uuid + '","dataType":"labels"},"grayscale":{"host":"http://wasptrace.flatironinstitute.org/","uuid":"bfeeeb2b98bb4b2aa9b5e38256c6f1f1","dataType":"grayscalejpeg"}}'
+    neuroglancerInfo_tmp = '{}'
     neuroglancerInfo = neuroglancerInfo_tmp.replace('"','""')
 
     neuroglancer_meta_updated_json = config_data["neuroglancer_meta"]
